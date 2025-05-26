@@ -1,0 +1,17 @@
+fastapi
+uvicorn
+python-multipart
+boto3
+pydantic
+python-dotenv
+
+
+
+torch 
+torchvision 
+transformers 
+opencv-python 
+pillow
+doctr[torch] 
+python-dotenv
+accelerate
