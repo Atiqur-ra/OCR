@@ -4,6 +4,7 @@ python-multipart
 boto3
 pydantic
 python-dotenv
+confluent-kafka
 
 
 

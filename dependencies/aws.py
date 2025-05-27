@@ -2,6 +2,7 @@ import boto3
 from config import settings
 
 def get_s3_client():
+    """Returns an authenticated S3 client using credentials from settings."""
     return boto3.client(
         "s3",
         aws_access_key_id=settings.AWS_ACCESS_KEY_ID,
