@@ -1,6 +1,11 @@
 from confluent_kafka import Producer
 import json
 from kafka.config import KAFKA_BOOTSTRAP_SERVERS, DOCUMENT_TOPIC
+import logging
+from logging_config import setup_logging
+
+setup_logging()
+logger = logging.getLogger(__name__)
 
 producer = Producer({'bootstrap.servers': KAFKA_BOOTSTRAP_SERVERS})
 
@@ -15,4 +20,4 @@ def publish_document_event(data: dict):
         )
         producer.flush()
     except Exception as e:
-        print(f"Producer error: {e}")
+        logging.error(f"Producer error: {e}")

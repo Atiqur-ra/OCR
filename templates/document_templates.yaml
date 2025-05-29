@@ -1,0 +1,21 @@
+passport:
+  Surname: ""
+  Given Names: ""
+  Nationality: ""
+  Place of Birth: ""
+  Date of Birth: ""
+  Date of Issue: ""
+  Date of Expiration: ""
+  Passport Number: ""
+
+driving_license:
+  License Number: ""
+  Full Name: ""
+  Date of Birth: ""
+  Issue Date: ""
+  Expiration Date: ""
+  Class: ""
+  Restrictions: ""
+  Endorsements: ""
+  Address: ""
+  Issuing Authority: ""

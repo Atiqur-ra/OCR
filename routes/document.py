@@ -6,7 +6,7 @@ from kafka.producer import publish_document_event
 router = APIRouter(prefix="/api/documents", tags=["Documents"])
 
 @router.post("/upload/")
-async def upload_document(org:str= Form(...),name: str = Form(...), files: List[UploadFile] = File(...)):
+async def upload_document(org:str= Form(...),emp_id: str = Form(...), files: List[UploadFile] = File(...)):
     """
     Upload multiple documents to S3 and publish metadata to Kafka.
 
@@ -22,12 +22,12 @@ async def upload_document(org:str= Form(...),name: str = Form(...), files: List[
     upload_urls = []
     try:
         for file in files:
-            file_url = upload_file_to_s3(file, name, org)
+            file_url = upload_file_to_s3(file, emp_id, org)
             filename = file_url.split("/")[-1]
             publish_document_event({
                 "filename": filename,
                 "file_url": file_url,
-                "uploaded_by": name
+                "uploaded_by": emp_id
             })
             upload_urls.append(file_url)
         return {"urls": upload_urls}

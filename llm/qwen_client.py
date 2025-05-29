@@ -27,26 +27,27 @@ def encode_image_base64(image_path: str) -> str:
         logger.error(f"Failed to encode image '{image_path}': {e}")
         raise
 
-def analyze_document(image_path: str) -> str:
+def analyze_document(image_bytes: bytes) -> str:
     """
-    Sends the image to Qwen2.5-VL via Ollama for document analysis.
+    Analyzes document using Qwen2.5-VL by encoding image bytes to base64.
 
     Args:
-        image_path (str): Path to the local image file.
+        image_bytes (bytes): Raw image content.
 
     Returns:
-        str: Response from the model.
+        str: Model response.
     """
     try:
-        image_base64 = encode_image_base64(image_path)
+        image_base64 = base64.b64encode(image_bytes).decode("utf-8")
     except Exception as e:
-        logger.error(f"Encoding image failed: {e}")
+        logger.error(f"Base64 encoding failed: {e}")
         raise
 
     url = "http://localhost:11434/api/generate"
     payload = {
         "model": "qwen2.5vl:7b",
-        "prompt": "Classify this document and then extract all relevant textual data.",
+        "prompt": """Classify this document as one of the following types: Passport, Driving License, Resume, I-9, SSN, Timesheet, Invoice, Educational Certificate.
+                        Then extract only the relevant fields based on the document type.""",
         "images": [image_base64],
         "stream": False
     }
@@ -54,13 +55,12 @@ def analyze_document(image_path: str) -> str:
 
     try:
         response = requests.post(url, headers=headers, json=payload)
-
         if response.status_code == 200:
             result = response.json()
             logger.info(f"Document analyzed successfully.")
             return result.get("response", "No response text.")
         else:
-            error_msg = f"Qwen2.5-VL API error {response.status_code}: {response.text}"
+            error_msg = f"Ollama error {response.status_code}: {response.text}"
             logger.error(error_msg)
             raise RuntimeError(error_msg)
 
