@@ -46,7 +46,7 @@ def analyze_document(image_bytes: bytes) -> str:
     url = "http://localhost:11434/api/generate"
     payload = {
         "model": "qwen2.5vl:7b",
-        "prompt": """Classify this document as one of the following types: Passport, Driving License, Resume, I-9, SSN, Timesheet, Invoice, Educational Certificate.
+        "prompt": """Classify this document as one of the following types: Passport, Driving License, Resume, I-9, SSN, Time Sheet, Invoice, Educational Certificate.
                         Then extract only the relevant fields based on the document type.""",
         "images": [image_base64],
         "stream": False

@@ -7,15 +7,13 @@ passport:
   Date of Issue: ""
   Date of Expiration: ""
   Passport Number: ""
+  Authority: ""
 
-driving_license:
+driving license:
   License Number: ""
-  Full Name: ""
+  Name: ""
+  Gender: ""
   Date of Birth: ""
-  Issue Date: ""
-  Expiration Date: ""
-  Class: ""
-  Restrictions: ""
-  Endorsements: ""
-  Address: ""
+  Date of Issue: ""
+  Date of Expiry: ""
   Issuing Authority: ""

@@ -86,7 +86,7 @@ def extract_passport_fields(llm_output: str) -> dict:
 # Date of Birth: 07/12/1992
 # Expiry Date: 15-09-2032"""
 
-with open("driving license.jpeg", "rb") as file:
+with open("passport.png", "rb") as file:
     f = file.read()
 
 text = analyze_document(f)

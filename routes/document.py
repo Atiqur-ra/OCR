@@ -6,28 +6,35 @@ from kafka.producer import publish_document_event
 router = APIRouter(prefix="/api/documents", tags=["Documents"])
 
 @router.post("/upload/")
-async def upload_document(org:str= Form(...),emp_id: str = Form(...), files: List[UploadFile] = File(...)):
+async def upload_document(org:str= Form(...),emp_id: str = Form(...), document_types: List[str] = Form(...), files: List[UploadFile] = File(...)):
     """
     Upload multiple documents to S3 and publish metadata to Kafka.
 
     Args:
         org (str): Name of the Organisation
-        name (str): Name or identifier of the uploader.
+        emp_id (str): Id or identifier of the uploader.
+        document_types List[str] : Name of the document
         files (List[UploadFile]): List of files to be uploaded.
 
     Returns:
         dict: A dictionary containing a list of URLs for the successfully uploaded files.
 
     """
+    document_types = [doc.strip() for doc in document_types[0].split(",")]
+    if len(files) != len(document_types):
+        raise HTTPException(status_code=400, detail="Mismatch between number of files and document types.")
+
+
     upload_urls = []
     try:
-        for file in files:
-            file_url = upload_file_to_s3(file, emp_id, org)
+        for file, doc_type in zip(files, document_types):
+            file_url = upload_file_to_s3(file, emp_id, org,doc_type)
             filename = file_url.split("/")[-1]
             publish_document_event({
                 "filename": filename,
                 "file_url": file_url,
-                "uploaded_by": emp_id
+                "uploaded_by": emp_id,
+                "content_type": file.content_type
             })
             upload_urls.append(file_url)
         return {"urls": upload_urls}

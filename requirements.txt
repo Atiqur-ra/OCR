@@ -6,6 +6,9 @@ pydantic
 python-dotenv
 confluent-kafka
 pyyaml
+PyMuPDF 
+pdf2image 
+pillow
 
 
 

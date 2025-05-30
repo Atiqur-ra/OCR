@@ -10,7 +10,19 @@ setup_logging()
 logger = logging.getLogger(__name__)
 
 
-def upload_file_to_s3(file: UploadFile, emp_id: str, org:str) -> str:
+
+
+def generate_s3_key_by_type(file: UploadFile, emp_id: str, org: str, doc_type: str) -> str:
+    """
+    Generate S3 key based on organization, employee, and document type.
+
+    Example key: org1/emp123/passport.pdf
+    """
+    ext = file.filename.split(".")[-1]
+    return f"{org}/{emp_id}/{doc_type.lower()}.{ext}"
+
+
+def upload_file_to_s3(file: UploadFile, emp_id: str, org:str,doc_type: str) -> str:
     """
     Uploads a file to an S3 bucket under a specific folder with a unique filename.
 
@@ -23,9 +35,10 @@ def upload_file_to_s3(file: UploadFile, emp_id: str, org:str) -> str:
         str: The unique key (path) of the uploaded file in the S3 bucket.
 
     """
-    s3 = get_s3_client()
+    
     try:
-        unique_filename = f"{org}/{emp_id}/{uuid.uuid4()}_{file.filename}"
+        s3 = get_s3_client()
+        unique_filename = generate_s3_key_by_type(file, emp_id, org, doc_type)
         s3.upload_fileobj(
             file.file,
             settings.AWS_S3_BUCKET,
